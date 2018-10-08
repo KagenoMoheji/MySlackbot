@@ -1,6 +1,11 @@
 # SlackWeatherBot
 livedoorのWeather Hacksを用いて地域・時期を「コマンド風」入力してのリプライをするSlackBotの実装．
 
+## 動作環境
+- Python3.6.6
+- Heroku
+- GoogleChrome-headless/chromedriver
+
 ## 機能
 ### 1．デフォルトリプライ
 - 予期しないメンションがあった場合に，デフォルトのリプライを送りつつhelpマニュアルを記載する．
