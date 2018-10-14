@@ -17,5 +17,5 @@ livedoorのWeather Hacksを用いて地域・時期を「コマンド風」入�
 - ＊＊コマンドの後に記述したメンション内容をオウム返しでリプライする．
 ##### 3-2． [天気]
 - ＊＊コマンドの後に「時期(今日/明日/明後日)・地域」と入力して，その天気情報をリプライする．
-- 地域コードの取得はchromedriverによるスクレイピングを以下で使用．  
+- 地域コードの取得はSelenium & chromedriverによるスクレイピングを以下で使用．  
 [1次細分区定義表](http://weather.livedoor.com/forecast/rss/primary_area.xml)
