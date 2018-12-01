@@ -1,4 +1,4 @@
-# SlackWeatherBot
+# MySlackbot
 個人学習用のSlackbot．（テスト）機能をどんどん追加していく．
 
 ## 動作環境
