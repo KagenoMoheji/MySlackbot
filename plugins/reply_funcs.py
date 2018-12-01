@@ -1,10 +1,14 @@
 from slackbot.bot import respond_to, listen_to, default_reply
 import re
-from plugins.modules.weather_module import WeatherModule # 外部.py（モジュール）の読み込み
+# 外部.py（自作モジュール）の読み込み
+from plugins.modules.weather_module import WeatherModule
+from plugins.modules.apiai_module import ApiaiModule
+# 自作モジュールのインスタンス化
+wm = WeatherModule()
+am = ApiaiModule()
 
-@default_reply()
-def default(message):
-    info="""[とりせつ]
+
+info="""[とりせつ]
     ```
     私は成長中です．いろんな機能を習得していきます．
     基本的に「@bot_cocogs」宛にメンションすれば動作します．
@@ -30,6 +34,9 @@ def default(message):
     - 指定した「時期（今日，明日，明後日）・地域名」の天気をリプライします．
     ```
     """
+
+@default_reply()
+def default(message):
     message.reply("申し訳ございません．対応するメッセージが見つかりませんでした．\n\n" + info)
 
 @respond_to("元気？")
@@ -37,37 +44,9 @@ def default(message):
 def fixed_reply(message):
     message.reply("\n[固定(Fixed)]\nあぁ，元気です．\nWell, I'm fine, thanks.")
 
-
 @respond_to("help")
 def help(message):
-    info="""[とりせつ]
-    ```
-    私は成長中です．いろんな機能を習得していきます．
-    基本的に「@bot_cocogs」宛にメンションすれば動作します．
-    
-    （1）以下メンションを入力すると機能します．
-    ●help
-    - とりせつを表示します．
-    ●元気？/How are you?
-    - 固定リプライを送ります．
-    
-    （2）「＊＊」の間に以下コマンドを入力し，メンション本文を入力すると機能します．
-    ●おうむ/おうむ返し/repeat/Repeat
-    - メンション例
-        @bot_cocogs
-        ＊おうむ＊
-        おうむ返しして
-    - メンション本文をおうむ返しします．
-    ●天気/weather
-    - メンション例
-        @bot_cocogs
-        ＊天気＊
-        今日・東京
-    - 指定した「時期（今日/明日/明後日）・地域名」の天気をリプライします．
-    ```
-    """
     message.send(info)
-
 
 
 
@@ -88,11 +67,16 @@ def starcmd_reply(message):
         if reply_type in {"おうむ","おうむ返し","repeat","Repeat"}:
             message.send("\n[おうむ返し(Repeat)]\n```{0}```".format(text))
         elif reply_type in {"天気", "weather"}:
-            wm = WeatherModule(text)
-            if wm.getWeatherInfo() != 0:
-                message.reply(str(wm.getWeatherInfo()))
-            else:
-                message.reply("\n入力した地域名の天気情報を取得できませんでした．\n再度別の地域名でお試しください．")
+            try:
+                wm.arrangeInput(text)
+                if wm.getWeatherInfo() != -1:
+                    message.reply(str(wm.getWeatherInfo()))
+                else:
+                    message.reply("\n入力した地域名の天気情報を取得できませんでした．\n再度別の地域名でお試しください．")
+            except:
+                message.reply("処理中にエラーが生じました．\n入力した地域名が不適切だったか，システムエラーが発生しています．")
+        elif reply_type in {"apiai", "APIAI", "Dialogflow", "dialogflow", "API.AI", "DIALOGFLOW"}:
+            message.reply(str(am.getResponse(text)))
         else:
             message.send("\n＊＊コマンドを認識できませんでした．")
     else:
